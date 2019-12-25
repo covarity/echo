@@ -3,7 +3,9 @@ package echo
 import (
 	"flag"
 
+	"github.com/covarity/echo/pkg/cmd/cli/tcp"
 	"github.com/covarity/echo/pkg/cmd/cli/version"
+	"github.com/covarity/echo/pkg/cmd/server"
 	"github.com/spf13/cobra"
 	"k8s.io/klog"
 )
@@ -22,6 +24,8 @@ func NewCommand(name string) *cobra.Command {
 	}
 
 	c.AddCommand(version.NewCommand())
+	c.AddCommand(tcp.NewCommand())
+	c.AddCommand(server.NewCommand())
 
 	klog.InitFlags(flag.CommandLine)
 	return c
