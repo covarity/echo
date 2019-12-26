@@ -1,0 +1,184 @@
+syntax = "proto3";
+package v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+	info: {
+		title: "Task Service";
+		version: "1.0";
+		contact: {
+			name: "echo project";
+			url: "https://github.com/covarity/echo";
+			email: "ben.ebsworth@gmail.com";
+        };
+    };
+    schemes: HTTP;
+    consumes: "application/json";
+    produces: "application/json";
+    responses: {
+		key: "404";
+		value: {
+			description: "Returned when the resource does not exist.";
+			schema: {
+				json_schema: {
+					type: STRING;
+				}
+			}
+		}
+	}
+};
+
+// Generic Interaction Task
+message Task {
+    // Unique integer identifier of the task
+    int64 id = 1;
+
+    // Title of the task
+    string title = 2;
+
+    // Detail description of the task
+    string description = 3;
+
+    // Date and time to remind the task
+    google.protobuf.Timestamp reminder = 4;
+}
+
+// Request data to create new task
+message CreateRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Task entity to add
+    Task task = 2;
+}
+
+// Contains data of created  task
+message CreateResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // ID of created task
+    int64 id = 2;
+}
+
+// Request data to read task
+message ReadRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Unique integer identifier of the task
+    int64 id = 2;
+}
+
+// Contains task data specified in by ID request
+message ReadResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Task entity read by ID
+    Task task = 2;
+}
+
+// Request data to update task
+message UpdateRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Task entity to update
+    Task task = 2;
+}
+
+// Contains status of update operation
+message UpdateResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Contains number of entities have beed updated
+    // Equals 1 in case of succesfull update
+    int64 updated = 2;
+}
+
+// Request data to delete task
+message DeleteRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Unique integer identifier of the task to delete
+    int64 id = 2;
+}
+
+// Contains status of delete operation
+message DeleteResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // Contains number of entities have beed deleted
+    // Equals 1 in case of succesfull delete
+    int64 deleted = 2;
+}
+
+// Request data to read all task
+message ReadAllRequest{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+}
+
+// Contains list of all tasks
+message ReadAllResponse{
+    // API versioning: it is my best practice to specify version explicitly
+    string api = 1;
+
+    // List of all tasks
+    repeated Task task = 2;
+}
+
+// Service to manage list of tasks
+service TaskService {
+
+     // Read all tasks
+     rpc ReadAll(ReadAllRequest) returns (ReadAllResponse) {
+        option (google.api.http) = {
+            get: "/v1/task/all"
+        };
+    };
+
+    // Create new task
+    rpc Create(CreateRequest) returns (CreateResponse) {
+        option (google.api.http) = {
+            post: "/v1/task"
+            body: "*"
+        };
+    };
+
+    // Read task
+    rpc Read(ReadRequest) returns (ReadResponse) {
+        option (google.api.http) = {
+            get: "/v1/task/{id}"
+        };
+    };
+
+    // Update task
+    rpc Update(UpdateRequest) returns (UpdateResponse) {
+        option (google.api.http) = {
+            put: "/v1/task/{task.id}"
+            body: "*"
+
+            additional_bindings {
+                patch: "/v1/task/{task.id}"
+                body: "*"
+            }
+        };
+    };
+
+    // Delete task
+    rpc Delete(DeleteRequest) returns (DeleteResponse) {
+        option (google.api.http) = {
+            delete: "/v1/task/{id}"
+        };
+    }
+
+   
+}

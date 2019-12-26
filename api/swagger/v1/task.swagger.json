@@ -1,0 +1,382 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Task Service",
+    "version": "1.0",
+    "contact": {
+      "name": "echo project",
+      "url": "https://github.com/covarity/echo",
+      "email": "ben.ebsworth@gmail.com"
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/task": {
+      "post": {
+        "summary": "Create new task",
+        "operationId": "Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      }
+    },
+    "/v1/task/all": {
+      "get": {
+        "summary": "Read all tasks",
+        "operationId": "ReadAll",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ReadAllResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "api",
+            "description": "API versioning: it is my best practice to specify version explicitly.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      }
+    },
+    "/v1/task/{id}": {
+      "get": {
+        "summary": "Read task",
+        "operationId": "Read",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ReadResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Unique integer identifier of the task",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "api",
+            "description": "API versioning: it is my best practice to specify version explicitly.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      },
+      "delete": {
+        "summary": "Delete task",
+        "operationId": "Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Unique integer identifier of the task to delete",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "api",
+            "description": "API versioning: it is my best practice to specify version explicitly.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      }
+    },
+    "/v1/task/{task.id}": {
+      "put": {
+        "summary": "Update task",
+        "operationId": "Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "task.id",
+            "description": "Unique integer identifier of the task",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      },
+      "patch": {
+        "summary": "Update task",
+        "operationId": "Update2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "task.id",
+            "description": "Unique integer identifier of the task",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TaskService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "v1CreateRequest": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "task": {
+          "$ref": "#/definitions/v1Task",
+          "title": "Task entity to add"
+        }
+      },
+      "title": "Request data to create new task"
+    },
+    "v1CreateResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "title": "ID of created task"
+        }
+      },
+      "title": "Contains data of created  task"
+    },
+    "v1DeleteResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "deleted": {
+          "type": "string",
+          "format": "int64",
+          "title": "Contains number of entities have beed deleted\nEquals 1 in case of succesfull delete"
+        }
+      },
+      "title": "Contains status of delete operation"
+    },
+    "v1ReadAllResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "task": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Task"
+          },
+          "title": "List of all tasks"
+        }
+      },
+      "title": "Contains list of all tasks"
+    },
+    "v1ReadResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "task": {
+          "$ref": "#/definitions/v1Task",
+          "title": "Task entity read by ID"
+        }
+      },
+      "title": "Contains task data specified in by ID request"
+    },
+    "v1Task": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "title": "Unique integer identifier of the task"
+        },
+        "title": {
+          "type": "string",
+          "title": "Title of the task"
+        },
+        "description": {
+          "type": "string",
+          "title": "Detail description of the task"
+        },
+        "reminder": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Date and time to remind the task"
+        }
+      },
+      "title": "Generic Interaction Task"
+    },
+    "v1UpdateRequest": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "task": {
+          "$ref": "#/definitions/v1Task",
+          "title": "Task entity to update"
+        }
+      },
+      "title": "Request data to update task"
+    },
+    "v1UpdateResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string",
+          "title": "API versioning: it is my best practice to specify version explicitly"
+        },
+        "updated": {
+          "type": "string",
+          "format": "int64",
+          "title": "Contains number of entities have beed updated\nEquals 1 in case of succesfull update"
+        }
+      },
+      "title": "Contains status of update operation"
+    }
+  }
+}

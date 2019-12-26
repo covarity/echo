@@ -1,0 +1,108 @@
+?   	github.com/covarity/echo/cmd/echo	[no test files]
+?   	github.com/covarity/echo/pkg/api/v1	[no test files]
+PASS
+ok  	github.com/covarity/echo/pkg/buildinfo	0.174s
+?   	github.com/covarity/echo/pkg/cmd	[no test files]
+?   	github.com/covarity/echo/pkg/cmd/cli/tcp	[no test files]
+?   	github.com/covarity/echo/pkg/cmd/cli/version	[no test files]
+?   	github.com/covarity/echo/pkg/cmd/echo	[no test files]
+?   	github.com/covarity/echo/pkg/cmd/server	[no test files]
+?   	github.com/covarity/echo/pkg/cmd/server/tcp	[no test files]
+goos: darwin
+goarch: amd64
+pkg: github.com/covarity/echo/pkg/queue
+BenchmarkPushFrontQueue-8    	   21590	     56483 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushFrontQueue-8    	   22026	     54485 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushFrontQueue-8    	   21946	     55033 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushFrontQueue-8    	   21908	     54610 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushFrontQueue-8    	   21943	     54824 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushFrontQueue-8    	   21883	     61146 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushFrontQueue-8    	   21685	     54796 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushFrontQueue-8    	   21631	     56838 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushFrontQueue-8    	   21764	     55253 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushFrontQueue-8    	   21919	     54762 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushFrontList-8     	   10000	    104938 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushFrontList-8     	   10000	    104358 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushFrontList-8     	   10000	    106500 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushFrontList-8     	   10000	    105777 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushFrontList-8     	   10000	    104892 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushFrontList-8     	   10000	    104798 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushFrontList-8     	   10000	    104891 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushFrontList-8     	   10000	    104554 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushFrontList-8     	   10000	    105353 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushFrontList-8     	   10000	    105220 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushBackQueue-8     	   21712	     54865 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushBackQueue-8     	   21994	     55380 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushBackQueue-8     	   21930	     54935 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushBackQueue-8     	   21752	     54584 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushBackQueue-8     	   21801	     55114 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushBackQueue-8     	   22041	     54900 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushBackQueue-8     	   21951	     55033 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushBackQueue-8     	   21664	     55274 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushBackQueue-8     	   21866	     55048 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushBackQueue-8     	   21883	     54972 ns/op	   57400 B/op	    1035 allocs/op
+BenchmarkPushBackList-8      	   10000	    105168 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushBackList-8      	   10000	    105954 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushBackList-8      	   10000	    106072 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushBackList-8      	   10000	    105829 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushBackList-8      	   10000	    106480 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushBackList-8      	   10000	    105549 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushBackList-8      	   10000	    105125 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushBackList-8      	   10000	    105312 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushBackList-8      	   10000	    105335 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushBackList-8      	   10000	    105201 ns/op	   90152 B/op	    3072 allocs/op
+BenchmarkPushBackChannel-8   	   24913	     48010 ns/op	   32856 B/op	    1025 allocs/op
+BenchmarkPushBackChannel-8   	   24668	     47980 ns/op	   32856 B/op	    1025 allocs/op
+BenchmarkPushBackChannel-8   	   25107	     50212 ns/op	   32856 B/op	    1025 allocs/op
+BenchmarkPushBackChannel-8   	   25026	     47987 ns/op	   32856 B/op	    1025 allocs/op
+BenchmarkPushBackChannel-8   	   24866	     48255 ns/op	   32856 B/op	    1025 allocs/op
+BenchmarkPushBackChannel-8   	   25030	     48246 ns/op	   32856 B/op	    1025 allocs/op
+BenchmarkPushBackChannel-8   	   24955	     48139 ns/op	   32856 B/op	    1025 allocs/op
+BenchmarkPushBackChannel-8   	   24739	     48049 ns/op	   32856 B/op	    1025 allocs/op
+BenchmarkPushBackChannel-8   	   24844	     48327 ns/op	   32856 B/op	    1025 allocs/op
+BenchmarkPushBackChannel-8   	   25035	     48076 ns/op	   32856 B/op	    1025 allocs/op
+BenchmarkRandomQueue-8       	   10000	    116729 ns/op	   62168 B/op	    1631 allocs/op
+BenchmarkRandomQueue-8       	   10000	    116019 ns/op	   62168 B/op	    1631 allocs/op
+BenchmarkRandomQueue-8       	   10000	    117084 ns/op	   62168 B/op	    1631 allocs/op
+BenchmarkRandomQueue-8       	   10000	    115160 ns/op	   62168 B/op	    1631 allocs/op
+BenchmarkRandomQueue-8       	   10000	    115684 ns/op	   62168 B/op	    1631 allocs/op
+BenchmarkRandomQueue-8       	   10000	    117084 ns/op	   62168 B/op	    1631 allocs/op
+BenchmarkRandomQueue-8       	   10000	    116351 ns/op	   62168 B/op	    1631 allocs/op
+BenchmarkRandomQueue-8       	   10000	    115448 ns/op	   62168 B/op	    1631 allocs/op
+BenchmarkRandomQueue-8       	   10000	    114993 ns/op	   62168 B/op	    1631 allocs/op
+BenchmarkRandomQueue-8       	   10000	    115888 ns/op	   62168 B/op	    1631 allocs/op
+BenchmarkRandomList-8        	    6200	    192767 ns/op	  142680 B/op	    4862 allocs/op
+BenchmarkRandomList-8        	    6303	    193851 ns/op	  142680 B/op	    4862 allocs/op
+BenchmarkRandomList-8        	    5721	    194517 ns/op	  142680 B/op	    4862 allocs/op
+BenchmarkRandomList-8        	    6301	    192667 ns/op	  142680 B/op	    4862 allocs/op
+BenchmarkRandomList-8        	    6363	    193822 ns/op	  142680 B/op	    4862 allocs/op
+BenchmarkRandomList-8        	    6258	    192106 ns/op	  142680 B/op	    4862 allocs/op
+BenchmarkRandomList-8        	    6186	    192432 ns/op	  142680 B/op	    4862 allocs/op
+BenchmarkRandomList-8        	    6324	    192515 ns/op	  142680 B/op	    4862 allocs/op
+BenchmarkRandomList-8        	    6272	    192513 ns/op	  142680 B/op	    4862 allocs/op
+BenchmarkRandomList-8        	    6345	    192401 ns/op	  142680 B/op	    4862 allocs/op
+BenchmarkGrowShrinkQueue-8   	   13153	     91756 ns/op	   81792 B/op	    1042 allocs/op
+BenchmarkGrowShrinkQueue-8   	   13180	     92241 ns/op	   81792 B/op	    1042 allocs/op
+BenchmarkGrowShrinkQueue-8   	   13197	     91393 ns/op	   81792 B/op	    1042 allocs/op
+BenchmarkGrowShrinkQueue-8   	   13082	     91496 ns/op	   81792 B/op	    1042 allocs/op
+BenchmarkGrowShrinkQueue-8   	   13183	     90982 ns/op	   81792 B/op	    1042 allocs/op
+BenchmarkGrowShrinkQueue-8   	   13137	     92291 ns/op	   81792 B/op	    1042 allocs/op
+BenchmarkGrowShrinkQueue-8   	   13089	     91750 ns/op	   81791 B/op	    1042 allocs/op
+BenchmarkGrowShrinkQueue-8   	   13173	     91448 ns/op	   81791 B/op	    1042 allocs/op
+BenchmarkGrowShrinkQueue-8   	   13130	     91213 ns/op	   81792 B/op	    1042 allocs/op
+BenchmarkGrowShrinkQueue-8   	   13154	     91418 ns/op	   81792 B/op	    1042 allocs/op
+BenchmarkGrowShrinkList-8    	   10000	    110538 ns/op	   90159 B/op	    3072 allocs/op
+BenchmarkGrowShrinkList-8    	   10000	    115805 ns/op	   90159 B/op	    3072 allocs/op
+BenchmarkGrowShrinkList-8    	   10000	    110726 ns/op	   90159 B/op	    3072 allocs/op
+BenchmarkGrowShrinkList-8    	   10000	    110363 ns/op	   90159 B/op	    3072 allocs/op
+BenchmarkGrowShrinkList-8    	   10000	    110659 ns/op	   90159 B/op	    3072 allocs/op
+BenchmarkGrowShrinkList-8    	   10000	    110641 ns/op	   90159 B/op	    3072 allocs/op
+BenchmarkGrowShrinkList-8    	   10000	    110462 ns/op	   90159 B/op	    3072 allocs/op
+BenchmarkGrowShrinkList-8    	   10000	    110710 ns/op	   90159 B/op	    3072 allocs/op
+BenchmarkGrowShrinkList-8    	   10000	    110679 ns/op	   90159 B/op	    3072 allocs/op
+BenchmarkGrowShrinkList-8    	   10000	    110783 ns/op	   90159 B/op	    3072 allocs/op
+PASS
+ok  	github.com/covarity/echo/pkg/queue	130.158s
+?   	github.com/covarity/echo/pkg/service/v1	[no test files]
+?   	github.com/covarity/echo/pkg/tcp/client	[no test files]
+?   	github.com/covarity/echo/pkg/tcp/server	[no test files]
