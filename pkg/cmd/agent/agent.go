@@ -7,6 +7,7 @@ import (
 	"github.com/covarity/echo/pkg/protocol/grpc"
 	"github.com/covarity/echo/pkg/protocol/rest"
 	v1 "github.com/covarity/echo/pkg/service/v1"
+	"github.com/covarity/echo/pkg/queue"
 )
 
 // Config is configuration for Server
@@ -35,8 +36,9 @@ func RunServer() error {
 	if len(cfg.HTTPPort) == 0 {
 		return fmt.Errorf("invalid TCP port for HTTP gateway: '%s'", cfg.HTTPPort)
 	}
+	q := queue.New()
 
-	v1API := v1.NewTaskServiceServer()
+	v1API := v1.NewTaskServiceServer(q)
 
 	// run HTTP gateway
 	go func() {

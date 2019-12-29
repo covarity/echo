@@ -250,6 +250,16 @@
     }
   },
   "definitions": {
+    "TaskProtocol": {
+      "type": "string",
+      "enum": [
+        "TCP",
+        "HTTP",
+        "GRPC",
+        "UDP"
+      ],
+      "default": "TCP"
+    },
     "v1CreateRequest": {
       "type": "object",
       "properties": {
@@ -340,6 +350,10 @@
         "description": {
           "type": "string",
           "title": "Detail description of the task"
+        },
+        "protocol": {
+          "$ref": "#/definitions/TaskProtocol",
+          "title": "type of task"
         },
         "reminder": {
           "type": "string",

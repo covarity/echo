@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	v1 "github.com/covarity/echo/pkg/api/v1"
+	"github.com/covarity/echo/pkg/queue"
 )
 
 const (
@@ -18,10 +18,11 @@ const (
 
 // taskServiceServer is implementation of v1.taskServiceServer proto interface
 type taskServiceServer struct {
+	queue queue.Queue
 }
 
 // NewToDoServiceServer creates task service
-func NewTaskServiceServer() v1.TaskServiceServer {
+func NewTaskServiceServer(q *queue.Queue) v1.TaskServiceServer {
 	return &taskServiceServer{}
 }
 
@@ -44,12 +45,16 @@ func (s *taskServiceServer) Create(ctx context.Context, req *v1.CreateRequest) (
 		return nil, err
 	}
 
-	reminder, err := ptypes.Timestamp(req.Task.Reminder)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, "reminder field has invalid format-> "+err.Error())
-	}
+	fmt.Printf(req.Task.GetProtocol().String())
 
-	fmt.Printf("Task:Crete:reminder:%s", reminder)
+	// reminder, err := ptypes.Timestamp(req.Task.Reminder)
+	// if err != nil {
+	// 	return nil, status.Error(codes.InvalidArgument, "reminder field has invalid format-> "+err.Error())
+	// }
+
+	// fmt.Printf("Task:Create:reminder:%s", reminder)
+
+	s.queue.PushBack(queue.Item{Value: req.Task.GetProtocol(), Priority: 0})
 
 	var id int64 = 1
 
@@ -106,8 +111,10 @@ func (s *taskServiceServer) ReadAll(ctx context.Context, req *v1.ReadAllRequest)
 		return nil, err
 	}
 
+	title := s.queue.String()
+
 	return &v1.ReadAllResponse{
 		Api:  apiVersion,
-		Task: []*v1.Task{&v1.Task{Title: "test1"}},
+		Task: []*v1.Task{&v1.Task{Title: title}},
 	}, nil
 }

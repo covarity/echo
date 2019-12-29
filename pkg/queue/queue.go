@@ -7,8 +7,8 @@ import (
 )
 
 type Item struct {
-	value    interface{}
-	priority int
+	Value    interface{}
+	Priority int
 }
 
 // ItemQueue the queue of Items
@@ -164,10 +164,10 @@ func (q *Queue) PopFront() Item {
 	q.lock.Lock()
 	if q.empty() {
 		q.lock.Unlock()
-		return Item{value: nil, priority: 0}
+		return Item{Value: nil, Priority: 0}
 	}
 	v := q.items[q.front]
-	q.items[q.front] = Item{value: nil, priority: 0} // unused slots must be nil
+	q.items[q.front] = Item{Value: nil, Priority: 0} // unused slots must be nil
 	q.front = q.inc(q.front)
 	q.length--
 	q.lazyShrink()
@@ -180,11 +180,11 @@ func (q *Queue) PopBack() Item {
 	q.lock.Lock()
 	if q.empty() {
 		q.lock.Unlock()
-		return Item{value: nil, priority: 0}
+		return Item{Value: nil, Priority: 0}
 	}
 	q.back = q.dec(q.back)
 	v := q.items[q.back]
-	q.items[q.back] = Item{value: nil, priority: 0} // unused slots must be nil
+	q.items[q.back] = Item{Value: nil, Priority: 0} // unused slots must be nil
 	q.length--
 	q.lazyShrink()
 	q.lock.Unlock()

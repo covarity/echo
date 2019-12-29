@@ -1,0 +1,26 @@
+{
+  "folders": [
+	{
+		"path": "/Users/castlemilk/projects/kubernetes-cicd"
+	},
+	{
+		"path": "/Users/castlemilk/projects/covarity/docs"
+	},
+	{
+		"path": "/Users/castlemilk/projects/covarity/examples"
+	},
+	{
+		"path": "/Users/castlemilk/projects/covarity/conference-talks"
+	},
+	{
+		"path": "/Users/castlemilk/projects/covarity/anchorctl"
+	},
+	{
+		"path": "/Users/castlemilk/projects/benebsworth.com"
+	},
+	{
+		"path": "/Users/castlemilk/projects/covarity/echo"
+	}
+],
+  "settings": {}
+}

@@ -42,8 +42,17 @@ message Task {
     // Detail description of the task
     string description = 3;
 
+    enum Protocol {
+        TCP = 0;
+        HTTP = 1;
+        GRPC = 2;
+        UDP = 3;
+    }
+    // type of task
+    Protocol protocol = 4;
+
     // Date and time to remind the task
-    google.protobuf.Timestamp reminder = 4;
+    google.protobuf.Timestamp reminder = 5;
 }
 
 // Request data to create new task
