@@ -1,8 +1,10 @@
 package queue
 
-import "testing"
-import "container/list"
-import "math/rand"
+import (
+	"container/list"
+	"math/rand"
+	"testing"
+)
 
 func ensureEmpty(t *testing.T, q *Queue) {
 	if l := q.Len(); l != 0 {

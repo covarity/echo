@@ -7,7 +7,7 @@ import (
 	"github.com/covarity/echo/pkg/protocol/grpc"
 	"github.com/covarity/echo/pkg/protocol/rest"
 	v1 "github.com/covarity/echo/pkg/service/v1"
-	"github.com/covarity/echo/pkg/queue"
+	"github.com/covarity/echo/pkg/pqueue"
 )
 
 // Config is configuration for Server

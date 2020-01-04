@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	v1 "github.com/covarity/echo/pkg/api/v1"
-	"github.com/covarity/echo/pkg/queue"
+	"github.com/covarity/echo/pkg/pqueue"
 )
 
 const (
@@ -54,7 +54,7 @@ func (s *taskServiceServer) Create(ctx context.Context, req *v1.CreateRequest) (
 
 	// fmt.Printf("Task:Create:reminder:%s", reminder)
 
-	s.queue.PushBack(queue.Item{Value: req.Task.GetProtocol(), Priority: 0})
+	s.queue.Enqueue(queue.Item{Value: req.Task.GetProtocol()})
 
 	var id int64 = 1
 
