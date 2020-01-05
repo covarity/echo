@@ -43,7 +43,6 @@ func (pq *priorityQueue) Push(x interface{}) {
 	if item.timestamp != -1 {
 		item.timestamp = time.Now().UnixNano()
 	}
-	// fmt.Printf("Push:item:%+v\n", item)
 	*pq = append(*pq, item)
 }
 
@@ -53,15 +52,6 @@ func (pq *priorityQueue) Pop() (x interface{}) {
 		x = (*pq)[l-1]
 		(*pq)[l-1] = Item{}
 		*pq = (*pq)[:l-1]
-		// old := *pq
-		// n := len(old)
-		// fmt.Printf("Pop:n:%+d\n", n)
-		// item := old[n-1]
-		// fmt.Printf("Pop:item:%+v\n", item)
-		// fmt.Printf("Pop:item:0:%+v\n", old[0])
-		// // old[n-1] = Item{} // avoid memory leak
-		// // item.index = -1   // for safety
-		// *pq = old[0 : n-1]
 	}
 	return
 }
@@ -72,10 +62,10 @@ func (pq *priorityQueue) Front() Item {
 	item := old[n-1]
 	return item
 }
-func (pq priorityQueue) Get(i int) Item {
+func (pq *priorityQueue) Get(i int) Item {
 
-	if i >= 0 && i < len(pq) {
-		return pq[i]
+	if i >= 0 && i < pq.Len() {
+		return (*pq)[i]
 	}
 	return Item{}
 }
@@ -130,8 +120,8 @@ func (q *Queue) handleEvent(event Item, f *string) {
 	// 2. operations on bufferEvents array.
 	// 3. operations using the watchPatterns set (matchFile).
 	q.cond.Lock()
-	defer q.cond.Unlock()
 	q.sendEvent(event)
+	defer q.cond.Unlock()
 }
 
 // eventLoop runs the event loop.
@@ -255,30 +245,11 @@ func (q *Queue) Enqueue(item Item) {
 	return
 }
 
-// // PushBack inserts a new value v at the back of queue q.
-// func (q *Queue) PushBack(item Item) {
-// 	q.lock.Lock()
-// 	q.lazyInit()
-// 	q.lazyGrow()
-// 	q.items[q.back] = item
-// 	q.back = q.inc(q.back)
-// 	q.length++
-// 	q.lock.Unlock()
-// 	q.events <- item
-// }
-
 // Dequeue removes and returns the first element of queue q or nil.
 func (q *Queue) Dequeue() Item {
 	q.cond.Lock()
 	defer q.cond.Unlock()
-	// start:
-	// fmt.Printf("Dequeue:items:%+v\n", q.items)
 	item := heap.Pop(q.items)
-	// if item == nil {
-	// 	q.cond.Wait()
-	// 	goto start
-	// }
-
 	if item != nil {
 		q.front = q.dec(q.front)
 		q.length--
@@ -286,19 +257,3 @@ func (q *Queue) Dequeue() Item {
 	}
 	return Item{Value: nil}
 }
-
-// // PopBack removes and returns the last element of queue q or nil.
-// func (q *Queue) PopBack() Item {
-// 	q.lock.Lock()
-// 	if q.empty() {
-// 		q.lock.Unlock()
-// 		return Item{Value: nil, Priority: 0}
-// 	}
-// 	q.back = q.dec(q.back)
-// 	v := q.items[q.back]
-// 	q.items[q.back] = Item{Value: nil, Priority: 0} // unused slots must be nil
-// 	q.length--
-// 	q.lazyShrink()
-// 	q.lock.Unlock()
-// 	return v
-// }

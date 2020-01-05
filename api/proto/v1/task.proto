@@ -133,6 +133,15 @@ message DeleteResponse{
 message ReadAllRequest{
     // API versioning: it is my best practice to specify version explicitly
     string api = 1;
+
+    enum Protocol {
+        TCP = 0;
+        HTTP = 1;
+        GRPC = 2;
+        UDP = 3;
+    }
+    // type of task
+    Protocol protocol = 2;
 }
 
 // Contains list of all tasks

@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/covarity/echo/pkg/mux"
 	"github.com/covarity/echo/pkg/protocol/grpc"
 	"github.com/covarity/echo/pkg/protocol/rest"
 	v1 "github.com/covarity/echo/pkg/service/v1"
-	"github.com/covarity/echo/pkg/pqueue"
 )
 
 // Config is configuration for Server
@@ -36,9 +36,9 @@ func RunServer() error {
 	if len(cfg.HTTPPort) == 0 {
 		return fmt.Errorf("invalid TCP port for HTTP gateway: '%s'", cfg.HTTPPort)
 	}
-	q := queue.New()
+	m := mux.New()
 
-	v1API := v1.NewTaskServiceServer(q)
+	v1API := v1.NewTaskServiceServer(m)
 
 	// run HTTP gateway
 	go func() {

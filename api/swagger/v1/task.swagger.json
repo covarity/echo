@@ -79,6 +79,20 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "protocol",
+            "description": "type of task.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "TCP",
+              "HTTP",
+              "GRPC",
+              "UDP"
+            ],
+            "default": "TCP"
           }
         ],
         "tags": [
@@ -250,16 +264,6 @@
     }
   },
   "definitions": {
-    "TaskProtocol": {
-      "type": "string",
-      "enum": [
-        "TCP",
-        "HTTP",
-        "GRPC",
-        "UDP"
-      ],
-      "default": "TCP"
-    },
     "v1CreateRequest": {
       "type": "object",
       "properties": {
@@ -303,6 +307,16 @@
         }
       },
       "title": "Contains status of delete operation"
+    },
+    "v1ReadAllRequestProtocol": {
+      "type": "string",
+      "enum": [
+        "TCP",
+        "HTTP",
+        "GRPC",
+        "UDP"
+      ],
+      "default": "TCP"
     },
     "v1ReadAllResponse": {
       "type": "object",
@@ -352,7 +366,7 @@
           "title": "Detail description of the task"
         },
         "protocol": {
-          "$ref": "#/definitions/TaskProtocol",
+          "$ref": "#/definitions/v1TaskProtocol",
           "title": "type of task"
         },
         "reminder": {
@@ -362,6 +376,16 @@
         }
       },
       "title": "Generic Interaction Task"
+    },
+    "v1TaskProtocol": {
+      "type": "string",
+      "enum": [
+        "TCP",
+        "HTTP",
+        "GRPC",
+        "UDP"
+      ],
+      "default": "TCP"
     },
     "v1UpdateRequest": {
       "type": "object",
