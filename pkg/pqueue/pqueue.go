@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 )
-
+// Item which will be stored in queue
 type Item struct {
 	Value    interface{} // The value of the item; arbitrary.
 	priority int         // The priority of the item in the queue.
@@ -80,7 +80,7 @@ func (pq *priorityQueue) update(item *Item, value string, priority int) {
 // Listener is the function type to run on events.
 type Listener func(interface{})
 
-// ItemQueue the queue of Items
+// Queue the queue of Items
 type Queue struct {
 	items     *priorityQueue
 	cond      sync.RWMutex
@@ -88,6 +88,7 @@ type Queue struct {
 	back      int
 	length    int
 	events    chan Item
+	buffer 		int
 	quit      chan bool
 	listeners []Listener
 }
@@ -142,19 +143,20 @@ func (q *Queue) eventLoop() error {
 }
 
 // New returns an initialized empty queue.
-func New() *Queue {
-	return new(Queue).Init()
+func New(buffer int) *Queue {
+	return new(Queue).Init(buffer)
 }
 
 // Init initializes or clears queue q.
-func (q *Queue) Init() *Queue {
+func (q *Queue) Init(buffer int) *Queue {
 	q.items = new(priorityQueue)
+	q.buffer = buffer
 	q.front, q.back, q.length = 0, 0, 0
 	heap.Init(q.items)
 	if q.events != nil {
 		return nil
 	}
-	q.events = make(chan Item)
+	q.events = make(chan Item, q.buffer)
 	q.quit = make(chan bool)
 	q.eventLoop()
 	return q

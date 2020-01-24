@@ -77,7 +77,7 @@ func ensureLength(t *testing.T, q *Queue, len int) {
 func TestAddListener(t *testing.T) {
 	var output Item
 
-	q := New()
+	q := New(0)
 
 	done := make(chan bool)
 	defer close(done)
