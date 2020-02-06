@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 )
+
 // Item which will be stored in queue
 type Item struct {
 	Value    interface{} // The value of the item; arbitrary.
@@ -88,7 +89,7 @@ type Queue struct {
 	back      int
 	length    int
 	events    chan Item
-	buffer 		int
+	buffer    int
 	quit      chan bool
 	listeners []Listener
 }
@@ -170,7 +171,7 @@ func (q *Queue) Init(buffer int) *Queue {
 // But that's the price for making zero values useful immediately.
 func (q *Queue) lazyInit() {
 	if q.items == nil {
-		q.Init()
+		q.Init(0)
 	}
 }
 

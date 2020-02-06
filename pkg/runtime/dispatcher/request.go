@@ -2,6 +2,7 @@ package dispatcher
 
 import (
 	"context"
+	"fmt"
 )
 
 type Requester interface {
@@ -12,11 +13,10 @@ type Requester interface {
 	Done()
 }
 
-
 type requester struct {
-	impl *Impl
-	ctx context.Context
-	state *dispatchState
+	impl        *Impl
+	ctx         context.Context
+	state       *dispatchState
 	destination string
 }
 
@@ -29,8 +29,9 @@ func (r *requester) clear() {
 }
 
 func (r *requester) Request(destination string) error {
+	fmt.Printf("request.go:Request:destination:%s\n", destination)
 	s := r.impl.getSession(r.ctx, destination)
-	s.reportState = r.state
+	s.requestState = r.state
 	err := s.dispatch()
 	if err == nil {
 		err = s.err
@@ -40,7 +41,7 @@ func (r *requester) Request(destination string) error {
 }
 
 func (r *requester) Flush() error {
-	s := r.impl.getSession(r.ctx, nil)
+	s := r.impl.getSession(r.ctx, "")
 	s.requestState = r.state
 	err := s.err
 	r.impl.putSession(s)

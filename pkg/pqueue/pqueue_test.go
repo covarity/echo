@@ -1,4 +1,5 @@
 package queue
+
 // References
 // 1. https://golang.org/pkg/container/heap/#example__priorityQueue
 // 2. https://golang.org/src/container/heap/heap.go
@@ -23,7 +24,7 @@ func ensureEmpty(t *testing.T, q *Queue) {
 }
 
 func TestNew(t *testing.T) {
-	q := New()
+	q := New(0)
 	ensureEmpty(t, q)
 }
 
@@ -37,7 +38,7 @@ func ensureSingleton(t *testing.T, q *Queue) {
 }
 
 func TestSingleton(t *testing.T) {
-	q := New()
+	q := New(0)
 	q.AddListener(func(e interface{}) {
 		t.Logf("Received: %s.\n", e)
 	})
@@ -49,7 +50,7 @@ func TestSingleton(t *testing.T) {
 }
 
 func TestDuos(t *testing.T) {
-	q := New()
+	q := New(0)
 	q.AddListener(func(e interface{}) {
 		println("Received: %s.\n", e)
 	})
@@ -87,7 +88,6 @@ func TestAddListener(t *testing.T) {
 		done <- true
 	})
 	q.Enqueue(Item{Value: 43, priority: 0})
-
 
 	<-done // blocks until listener is triggered
 

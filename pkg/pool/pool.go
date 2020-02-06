@@ -4,6 +4,8 @@ import (
 	"sync"
 )
 
+// References
+// 1. https://www.ardanlabs.com/blog/2013/09/pool-go-routines-to-process-task.html
 
 // WorkFunc is a function that will be called by a worker in the pool
 type WorkFunc func(param interface{})

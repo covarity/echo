@@ -1,14 +1,27 @@
 package dispatcher
 
 import (
+	"context"
 	"sync"
+	"time"
 
+	"github.com/covarity/echo/pkg/adapter"
 	"github.com/covarity/echo/pkg/pool"
 )
 
 var (
 	protocols = []string{"TCP", "UDP", "HTTP", "GRPC"}
 )
+
+// Dispatcher dispatches incoming API calls to configured adapters.
+type Dispatcher interface {
+
+	// Check dispatches to the set of adapters associated with the Check API method
+	Check(ctx context.Context, destination string) (adapter.CheckResult, error)
+
+	// GetRequester get an interface where reports are buffered.
+	GetRequester(ctx context.Context) Requester
+}
 
 // Impl is the runtime implementation of the Dispatcher interface.
 type Impl struct {
@@ -23,11 +36,13 @@ type Impl struct {
 	statePool sync.Pool
 
 	// pool of reporters
-	reporterPool sync.Pool
+	requesterPool sync.Pool
 
 	// pool of goroutines
 	gp *pool.GoroutinePool
 }
+
+var _ Dispatcher = &Impl{}
 
 // New returns a new Impl instance. The Impl instance is initialized with an empty routing table.
 func New(handlerGP *pool.GoroutinePool) *Impl {
@@ -37,36 +52,84 @@ func New(handlerGP *pool.GoroutinePool) *Impl {
 
 	d.sessionPool.New = func() interface{} { return &session{} }
 	d.statePool.New = func() interface{} { return &dispatchState{} }
+	d.requesterPool.New = func() interface{} { return &requester{state: &dispatchState{}} }
 	return d
 }
 
-// Mux - Responsible for routing new tasks into the corresponding work queue and surfacing a consumable interface for handlers/adapters
-// type Mux struct {
-// 	Protocols []string
-// 	events    chan queue.Item
-// 	queues    map[string]*queue.Queue
-// }
+const (
+	defaultValidDuration = 1 * time.Minute
+	defaultValidUseCount = 10000
+)
 
-// // New returns an initialized Mux instance
-// func New() *Mux {
-// 	return new(Mux).Init()
-// }
+// Check implementation of runtime.Impl.
+func (d *Impl) Check(ctx context.Context, destination string) (adapter.CheckResult, error) {
+	s := d.getSession(ctx, destination)
 
-// // Init initializes Mux instance
-// func (m *Mux) Init() *Mux {
-// 	m.Protocols = protocols
-// 	m.queues = make(map[string]*queue.Queue)
-// 	for _, protocol := range m.Protocols {
-// 		m.queues[protocol] = queue.New()
-// 	}
-// 	return m
-// }
+	var r adapter.CheckResult
+	err := s.dispatch()
+	if err == nil {
+		r = s.checkResult
+		err = s.err
 
-// func (m *Mux) AddTask(x interface{}, protocol string) {
-// 	fmt.Printf("adding task:protocol:%s:x:%v", protocol, x)
-// 	m.queues[protocol].Enqueue(queue.Item{Value: x})
-// }
+		if err == nil {
+			// No adapters chimed in on this request, so we return a "good to go" value which can be cached
+			// for up to a minute.
+			//
+			// TODO: make these fallback values configurable
+			if r.IsDefault() {
+				r = adapter.CheckResult{
+					ValidUseCount: defaultValidUseCount,
+					ValidDuration: defaultValidDuration,
+				}
+			}
+		}
+	}
+	d.putSession(s)
+	return r, err
+}
 
-// func (m *Mux) ListTasks(protocol string) string {
-// 	return m.queues[protocol].String()
-// }
+// GetRequester ...
+func (d *Impl) GetRequester(ctx context.Context) Requester {
+	return d.getRequester(ctx)
+}
+
+// Session template variety is CHECK for output producing templates (CHECK_WITH_OUTPUT)
+func (d *Impl) getSession(context context.Context, destination string) *session {
+	s := d.sessionPool.Get().(*session)
+	s.destination = destination
+	s.impl = d
+	s.ctx = context
+
+	return s
+}
+
+func (d *Impl) putSession(s *session) {
+	s.clear()
+	d.sessionPool.Put(s)
+}
+
+func (d *Impl) getDispatchState(context context.Context) *dispatchState {
+	ds := d.statePool.Get().(*dispatchState)
+	ds.ctx = context
+
+	return ds
+}
+
+func (d *Impl) putDispatchState(ds *dispatchState) {
+	ds.clear()
+	d.statePool.Put(ds)
+}
+
+func (d *Impl) getRequester(context context.Context) *requester {
+	r := d.requesterPool.Get().(*requester)
+
+	r.impl = d
+	r.ctx = context
+
+	return r
+}
+
+func (d *Impl) putRequester(r *requester) {
+	r.clear()
+	d.requesterPool.Put(r)
+}

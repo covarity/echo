@@ -8,8 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	v1 "github.com/covarity/echo/pkg/api/v1"
-	"github.com/covarity/echo/pkg/queue"
-	"github.com/covarity/echo/pkg/mux"
+	"github.com/covarity/echo/pkg/runtime/dispatcher"
 )
 
 const (
@@ -19,12 +18,12 @@ const (
 
 // taskServiceServer is implementation of v1.taskServiceServer proto interface
 type taskServiceServer struct {
-	mux *mux.Mux
+	dispatcher dispatcher.Dispatcher
 }
 
 // NewToDoServiceServer creates task service
-func NewTaskServiceServer(m *mux.Mux) v1.TaskServiceServer {
-	return &taskServiceServer{mux: m}
+func NewTaskServiceServer(dispatcher dispatcher.Dispatcher) v1.TaskServiceServer {
+	return &taskServiceServer{dispatcher: dispatcher}
 }
 
 // checkAPI checks if the API version requested by client is supported by server
@@ -54,7 +53,9 @@ func (s *taskServiceServer) Create(ctx context.Context, req *v1.CreateRequest) (
 	// }
 
 	// fmt.Printf("Task:Create:reminder:%s", reminder)
-	s.mux.AddTask(queue.Item{Value: "test"}, req.Task.GetProtocol().String())
+	requester := s.dispatcher.GetRequester(ctx)
+	requester.Request(req.Task.GetProtocol().String())
+	// s.dispatcher.get(queue.Item{Value: "test"}, req.Task.GetProtocol().String())
 
 	var id int64 = 1
 
@@ -111,10 +112,10 @@ func (s *taskServiceServer) ReadAll(ctx context.Context, req *v1.ReadAllRequest)
 		return nil, err
 	}
 
-	title := s.mux.ListTasks(req.GetProtocol().String())
+	// title := s.mux.ListTasks(req.GetProtocol().String())
 
 	return &v1.ReadAllResponse{
 		Api:  apiVersion,
-		Task: []*v1.Task{&v1.Task{Title: title}},
+		Task: []*v1.Task{&v1.Task{Title: "test"}},
 	}, nil
 }

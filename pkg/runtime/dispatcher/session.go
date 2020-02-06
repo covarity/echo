@@ -17,13 +17,13 @@ type session struct {
 	checkResult adapter.CheckResult
 	// The current number of activeDispatches handler dispatches.
 	activeDispatches int
-	requestStates *dispatchState
-	err error
+	destination      string
+	requestState     *dispatchState
+	err              error
 
 	// channel for collecting states of completed dispatches.
 	completed chan *dispatchState
 }
-
 
 func (s *session) clear() {
 	s.impl = nil
@@ -37,12 +37,35 @@ func (s *session) clear() {
 		case <-s.completed:
 			// log.Warn("Leaked dispatch state discovered!")
 			continue
-		
-		default: 
+
+		default:
 			exit = true
 		}
 	}
 
 }
 
+func (s *session) dispatch() error {
+	var state *dispatchState
+	state = s.impl.getDispatchState(s.ctx)
+	s.requestState = state
 
+	s.dispatchToHandler(state)
+	return nil
+}
+
+func (s *session) dispatchToHandler(ds *dispatchState) {
+	s.activeDispatches++
+	ds.session = s
+	s.impl.gp.ScheduleWork(ds.invokeHandler, nil)
+}
+
+func (s *session) waitForDispatched() {
+	for s.activeDispatches > 0 {
+		state := <-s.completed
+		s.activeDispatches--
+		if state.err != nil {
+			print("error occured wih dispatch %s", state.err)
+		}
+	}
+}
