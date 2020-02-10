@@ -5,13 +5,14 @@ import (
 	"fmt"
 
 	"github.com/covarity/echo/pkg/adapter"
+	"github.com/covarity/echo/pkg/runtime/routing"
 )
 
 // dispatchState keeps the input/output state during the dispatch to a handler. It is used as temporary
 // memory location to keep ephemeral state, thus avoiding garbage creation.
 type dispatchState struct {
-	session *session
-	ctx     context.Context
+	session     *session
+	ctx         context.Context
 	destination *routing.Destination
 	checkResult adapter.CheckResult
 	err         error
@@ -35,7 +36,6 @@ func (ds *dispatchState) invokeHandler(interface{}) {
 		ds.session.completed <- ds
 	}()
 	fmt.Printf("invokeHandler")
-	ds.des
 	ds.session.completed <- ds
 	reachedEnd = true
 

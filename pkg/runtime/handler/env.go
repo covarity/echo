@@ -15,7 +15,7 @@ type env struct {
 }
 
 // NewEnv returns a new environment instance.
-func NewEnv(cfgID int64, name string, gp *pool.GoroutinePool) adapter.Env {
+func NewEnv(name string, gp *pool.GoroutinePool) adapter.Env {
 	return env{
 		// logger:        newLogger(name),
 		gp:      gp,

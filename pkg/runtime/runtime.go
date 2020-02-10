@@ -3,6 +3,7 @@ package runtime
 import (
 	"sync"
 
+	"github.com/covarity/echo/pkg/adapter"
 	"github.com/covarity/echo/pkg/pool"
 	"github.com/covarity/echo/pkg/runtime/dispatcher"
 	"github.com/covarity/echo/pkg/runtime/handler"
@@ -24,12 +25,12 @@ type Runtime struct {
 
 // New returns a new instance of Runtime.
 func New(
-	// adapters map[string]*adapter.Info,
+	adapters map[string]*adapter.Info,
 	executorPool *pool.GoroutinePool,
 	handlerPool *pool.GoroutinePool) *Runtime {
-
+	handlers := handler.NewTable(adapters, handlerPool)
 	rt := &Runtime{
-		handlers:    handler.Empty(),
+		handlers:    handlers,
 		dispatcher:  dispatcher.New(executorPool),
 		handlerPool: handlerPool,
 	}

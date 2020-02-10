@@ -19,9 +19,20 @@ var checkResult = adapter.CheckResult{
 // GetInfo returns the Info associated with this adapter implementation.
 func GetInfo() adapter.Info {
 	info := metadata.GetInfo("tcp")
+	info.NewBuilder = func() adapter.HandlerBuilder { return &builder{} }
 	return info
 }
 
+func (*handler) Close() error { return nil }
+
 func (*handler) HandleRequest(context.Context) error {
 	return nil
+}
+
+type builder struct{}
+
+func (*builder) SetAdapterConfig(adapter.Config) {}
+
+func (b *builder) Build(context context.Context, env adapter.Env) (adapter.Handler, error) {
+	return &handler{}, nil
 }

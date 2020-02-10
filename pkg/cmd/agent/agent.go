@@ -4,10 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/covarity/echo/adapters"
 	"github.com/covarity/echo/pkg/pool"
 	"github.com/covarity/echo/pkg/protocol/grpc"
 	"github.com/covarity/echo/pkg/protocol/rest"
 	"github.com/covarity/echo/pkg/runtime"
+	"github.com/covarity/echo/pkg/runtime/config"
 	v1 "github.com/covarity/echo/pkg/service/v1"
 )
 
@@ -42,7 +44,9 @@ func RunServer() error {
 	if len(server.HTTPPort) == 0 {
 		return fmt.Errorf("invalid TCP port for HTTP gateway: '%s'", server.HTTPPort)
 	}
-	m := runtime.New(server.gp, server.adapterGP)
+	inventory := adapters.Inventory()
+	adapterMap := config.AdapterInfoMap(inventory)
+	m := runtime.New(adapterMap, server.gp, server.adapterGP)
 
 	v1API := v1.NewTaskServiceServer(m.Dispatcher())
 

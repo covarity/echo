@@ -1,9 +1,12 @@
 package handler
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/covarity/echo/pkg/adapter"
+	"github.com/covarity/echo/pkg/pool"
+	"github.com/covarity/echo/pkg/runtime/config"
 )
 
 const (
@@ -41,4 +44,35 @@ var emptyTable = &Table{}
 // Empty returns an empty table instance.
 func Empty() *Table {
 	return emptyTable
+}
+
+func NewTable(adapters map[string]*adapter.Info, gp *pool.GoroutinePool) *Table {
+	t := &Table{
+		entries:                   make(map[string]Entry, len(adapters)),
+		strayWorkersCheckRetries:  defaultRetryChecks,
+		strayWorkersRetryDuration: defaultRetryDuration,
+	}
+	for _, info := range adapters {
+		createEntry(t, info, gp)
+	}
+	return t
+}
+
+func createEntry(t *Table, info *adapter.Info, gp *pool.GoroutinePool) {
+	e := NewEnv(info.Name, gp).(env)
+	statichandler := &config.HandlerStatic{
+		Name:    info.Name,
+		Adapter: info,
+		Params:  nil,
+	}
+	handler, err := config.BuildHandler(statichandler, e)
+	if err != nil {
+		fmt.Errorf("unable to initilize adapter: handler='%s'", statichandler.GetName())
+	}
+	t.entries[info.Name] = Entry{
+		Name:        statichandler.GetName(),
+		Handler:     handler,
+		AdapterName: statichandler.AdapterName(),
+		env:         e,
+	}
 }
