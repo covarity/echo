@@ -76,3 +76,21 @@ func createEntry(t *Table, info *adapter.Info, gp *pool.GoroutinePool) {
 		env:         e,
 	}
 }
+
+func (t *Table) Len() int {
+	return len(t.entries)
+}
+
+// Get returns the entry for a Handler with the given name, if it exists.
+func (t *Table) Get(handlerName string) (Entry, bool) {
+	e, found := t.entries[handlerName]
+	if !found {
+		return Entry{}, false
+	}
+
+	return e, true
+}
+
+func (t *Table) Entries() map[string]Entry {
+	return t.entries
+}
