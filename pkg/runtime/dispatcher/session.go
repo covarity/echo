@@ -2,6 +2,7 @@ package dispatcher
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/covarity/echo/pkg/adapter"
 )
@@ -11,6 +12,9 @@ import (
 type session struct {
 	// owner
 	impl *Impl
+
+	// routing context for the life of this session
+	rc *RoutingContext
 	// input parameters that was collected as part of the call.
 	ctx context.Context
 	// output parameters that get collected / accumulated as results.
@@ -27,6 +31,7 @@ type session struct {
 
 func (s *session) clear() {
 	s.impl = nil
+	s.rc = nil
 	s.ctx = nil
 	s.checkResult = adapter.CheckResult{}
 	s.err = nil
@@ -47,7 +52,9 @@ func (s *session) clear() {
 
 func (s *session) dispatch() error {
 	var state *dispatchState
-	state = s.impl.getDispatchState(s.ctx)
+	fmt.Println("dispatch:destination:", s.destination)
+	destination := s.rc.Routes.GetDestination(s.destination)
+	state = s.impl.getDispatchState(s.ctx, destination)
 	s.requestState = state
 
 	s.dispatchToHandler(state)

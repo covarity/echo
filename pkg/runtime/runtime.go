@@ -7,6 +7,7 @@ import (
 	"github.com/covarity/echo/pkg/pool"
 	"github.com/covarity/echo/pkg/runtime/dispatcher"
 	"github.com/covarity/echo/pkg/runtime/handler"
+	"github.com/covarity/echo/pkg/runtime/routing"
 )
 
 // Runtime is the main entry point to the Mixer runtime environment. It listens to configuration, instantiates handler
@@ -34,6 +35,10 @@ func New(
 		dispatcher:  dispatcher.New(executorPool),
 		handlerPool: handlerPool,
 	}
+
+	routes := routing.BuildTable(handlers, adapters)
+
+	rt.dispatcher.ChangeRoute(routes)
 
 	return rt
 }

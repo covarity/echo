@@ -7,6 +7,7 @@ import (
 
 	"github.com/covarity/echo/pkg/adapter"
 	"github.com/covarity/echo/pkg/pool"
+	"github.com/covarity/echo/pkg/runtime/routing"
 )
 
 var (
@@ -26,6 +27,8 @@ type Dispatcher interface {
 // Impl is the runtime implementation of the Dispatcher interface.
 type Impl struct {
 
+	// Current routing context.
+	rc *RoutingContext
 	// the reader-writer lock for accessing or changing the context.
 	rcLock sync.RWMutex
 
@@ -48,6 +51,9 @@ var _ Dispatcher = &Impl{}
 func New(handlerGP *pool.GoroutinePool) *Impl {
 	d := &Impl{
 		gp: handlerGP,
+		rc: &RoutingContext{
+			Routes: routing.Empty(),
+		},
 	}
 
 	d.sessionPool.New = func() interface{} { return &session{} }
@@ -96,6 +102,7 @@ func (d *Impl) GetRequester(ctx context.Context) Requester {
 // Session template variety is CHECK for output producing templates (CHECK_WITH_OUTPUT)
 func (d *Impl) getSession(context context.Context, destination string) *session {
 	s := d.sessionPool.Get().(*session)
+	s.rc = d.acquireRoutingContext()
 	s.destination = destination
 	s.impl = d
 	s.ctx = context
@@ -108,8 +115,9 @@ func (d *Impl) putSession(s *session) {
 	d.sessionPool.Put(s)
 }
 
-func (d *Impl) getDispatchState(context context.Context) *dispatchState {
+func (d *Impl) getDispatchState(context context.Context, destination *routing.Destination) *dispatchState {
 	ds := d.statePool.Get().(*dispatchState)
+	ds.destination = destination
 	ds.ctx = context
 
 	return ds
@@ -132,4 +140,27 @@ func (d *Impl) getRequester(context context.Context) *requester {
 func (d *Impl) putRequester(r *requester) {
 	r.clear()
 	d.requesterPool.Put(r)
+}
+
+func (d *Impl) acquireRoutingContext() *RoutingContext {
+	d.rcLock.RLock()
+	rc := d.rc
+	rc.incRef()
+	d.rcLock.RUnlock()
+
+	return rc
+}
+
+// ChangeRoute changes the routing table on the Impl which, in turn, ends up creating a new RoutingContext.
+func (d *Impl) ChangeRoute(newTable *routing.Table) *RoutingContext {
+	newRC := &RoutingContext{
+		Routes: newTable,
+	}
+
+	d.rcLock.Lock()
+	old := d.rc
+	d.rc = newRC
+	d.rcLock.Unlock()
+
+	return old
 }

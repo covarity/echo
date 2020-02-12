@@ -23,5 +23,6 @@ require (
 	google.golang.org/grpc v1.26.0
 	gopkg.in/yaml.v2 v2.2.7 // indirect
 	istio.io/istio v0.0.0-20200112005321-89d5d07bd238
+	istio.io/pkg v0.0.0-20191113122952-4f521de9c8ca
 	k8s.io/klog v1.0.0
 )
