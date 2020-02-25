@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package adapter.model.v1;
+
+option go_package="github.com/covarity/echo/api/adapter/model/v1";
+
+// Template provides the details of a Echo template.
+message Template {
+    // Base64 encoded proto descriptor of the template.
+    string descriptor = 1;
+}

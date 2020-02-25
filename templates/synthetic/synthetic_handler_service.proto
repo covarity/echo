@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package synthetic;
+
+
+
+import "adapter/model/v1/extensions.proto";
+import "gogo/gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+import "adapter/model/v1/request.proto";
+
+
+option (adapter.model.v1.template_variety) = TEMPLATE_VARIETY_REQUEST;
+option (adapter.model.v1.template_name) = "synthetic";
+
+
+option (gogoproto.goproto_getters_all) = false;
+option (gogoproto.equal_all) = false;
+option (gogoproto.gostring_all) = false;
+
+
+// HandleSyntheticService is implemented by backends that wants to handle request-time 'synthetic' instances.
+service HandleSyntheticService {
+  // HandleTraceSpan is called by Mixer at request-time to deliver 'tracespan' instances to the backend.
+  rpc HandleSynthetic(HandleSyntheticRequest) returns (adapter.model.v1.RequestResult);
+  
+}
+
+// Request message for HandleSynthetic method.
+message HandleSyntheticRequest {
+
+  // Adapter specific handler configuration.
+  //
+  google.protobuf.Any adapter_config = 2;
+
+  // Id to dedupe identical requests from Mixer.
+  // string dedup_id = 3;
+}

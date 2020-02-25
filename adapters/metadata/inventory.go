@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/covarity/echo/pkg/adapter"
+	"github.com/covarity/echo/templates/synthetic"
 )
 
 var (
@@ -12,11 +13,25 @@ var (
 			Name:        "noop",
 			Impl:        "github.com/covarity/echo/adapter/noop",
 			Description: "Does nothing (useful for testing)",
+			SupportedTemplates: []string{
+				synthetic.TemplateName,
+			},
 		},
 		{
 			Name:        "tcp",
 			Impl:        "github.com/covarity/echo/adapter/tcp",
 			Description: "TCP based interactions",
+			SupportedTemplates: []string{
+				synthetic.TemplateName,
+			},
+		},
+		{
+			Name:        "http",
+			Impl:        "github.com/covarity/echo/adapter/http",
+			Description: "HTTP based interactions",
+			SupportedTemplates: []string{
+				synthetic.TemplateName,
+			},
 		},
 	}
 )

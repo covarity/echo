@@ -18,8 +18,9 @@ func GetInfo() adapter.Info {
 
 func (*handler) Close() error { return nil }
 
-func (*handler) HandleRequestNothing(context.Context) {
-	fmt.Print("noop:HandleRequestNothing")
+func (*handler) HandleRequestNothing(context.Context) error {
+	fmt.Println("handling tcp request")
+	return nil
 }
 
 type builder struct{}

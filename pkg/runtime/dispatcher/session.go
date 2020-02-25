@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/covarity/echo/pkg/adapter"
+	adptTmpl "github.com/covarity/echo/api/adapter/model/v1"
 )
 
 // session represents a call session to the Impl. It contains all the mutable state needed for handling the
@@ -25,6 +26,9 @@ type session struct {
 	requestState     *dispatchState
 	err              error
 
+	// The variety of the operation that is being performed.
+	variety adptTmpl.TemplateVariety
+
 	// channel for collecting states of completed dispatches.
 	completed chan *dispatchState
 }
@@ -33,6 +37,7 @@ func (s *session) clear() {
 	s.impl = nil
 	s.rc = nil
 	s.ctx = nil
+	s.variety = 0
 	s.checkResult = adapter.CheckResult{}
 	s.err = nil
 	s.activeDispatches = 0
@@ -53,7 +58,7 @@ func (s *session) clear() {
 func (s *session) dispatch() error {
 	var state *dispatchState
 	fmt.Println("dispatch:destination:", s.destination)
-	destination := s.rc.Routes.GetDestination(s.destination)
+	destination := s.rc.Routes.GetDestination(s.variety, s.destination)
 	state = s.impl.getDispatchState(s.ctx, destination)
 	s.requestState = state
 

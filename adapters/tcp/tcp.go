@@ -2,6 +2,7 @@ package tcp
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/covarity/echo/adapters/metadata"
@@ -26,6 +27,7 @@ func GetInfo() adapter.Info {
 func (*handler) Close() error { return nil }
 
 func (*handler) HandleRequest(context.Context) error {
+	fmt.Println("handling tcp request")
 	return nil
 }
 

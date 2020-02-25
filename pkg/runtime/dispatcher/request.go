@@ -3,6 +3,7 @@ package dispatcher
 import (
 	"context"
 	"fmt"
+	adptTmpl "github.com/covarity/echo/api/adapter/model/v1"
 )
 
 type Requester interface {
@@ -30,7 +31,7 @@ func (r *requester) clear() {
 
 func (r *requester) Request(destination string) error {
 	fmt.Printf("request.go:Request:destination:%s\n", destination)
-	s := r.impl.getSession(r.ctx, destination)
+	s := r.impl.getSession(r.ctx, adptTmpl.TemplateVariety_TEMPLATE_VARIETY_REQUEST, destination)
 	s.requestState = r.state
 	err := s.dispatch()
 	if err == nil {
@@ -41,7 +42,7 @@ func (r *requester) Request(destination string) error {
 }
 
 func (r *requester) Flush() error {
-	s := r.impl.getSession(r.ctx, "")
+	s := r.impl.getSession(r.ctx, adptTmpl.TemplateVariety_TEMPLATE_VARIETY_REQUEST, "")
 	s.requestState = r.state
 	err := s.err
 	r.impl.putSession(s)

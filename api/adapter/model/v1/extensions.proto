@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package adapter.model.v1;
+
+
+option go_package="github.com/covarity/echo/api/adapter/model/v1";
+
+import "google/protobuf/descriptor.proto";
+
+
+
+
+// The available varieties of templates, controlling the semantics of what an adapter does with each instance.
+enum TemplateVariety {
+  // Makes the template applicable for Echo's synthetic request calls. 
+  TEMPLATE_VARIETY_REQUEST = 0;
+  // Makes the template applicable for Echo's synthetic request calls. 
+  TEMPLATE_VARIETY_CHECK = 1;
+
+  // Makes the template applicable for Echo's synthetic request calls. 
+  TEMPLATE_VARIETY_PERFORMANCE = 2;
+}
+
+// File level options for the template.
+extend google.protobuf.FileOptions {
+  // Required: option for the TemplateVariety.
+  TemplateVariety template_variety = 72295727;
+  // Optional: option for the template name.
+  // If not specified, the last segment of the template proto's package name is used to
+  // derive the template name.
+  string template_name = 72295888;
+}

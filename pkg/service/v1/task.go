@@ -3,6 +3,7 @@ package v1
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -45,7 +46,7 @@ func (s *taskServiceServer) Create(ctx context.Context, req *v1.CreateRequest) (
 		return nil, err
 	}
 
-	fmt.Printf(req.Task.GetProtocol().String())
+	fmt.Printf("service:v1:Create:Protocol:%s", req.Task.GetProtocol().String())
 
 	// reminder, err := ptypes.Timestamp(req.Task.Reminder)
 	// if err != nil {
@@ -54,8 +55,7 @@ func (s *taskServiceServer) Create(ctx context.Context, req *v1.CreateRequest) (
 
 	// fmt.Printf("Task:Create:reminder:%s", reminder)
 	requester := s.dispatcher.GetRequester(ctx)
-	requester.Request(req.Task.GetProtocol().String())
-	// s.dispatcher.get(queue.Item{Value: "test"}, req.Task.GetProtocol().String())
+	requester.Request(strings.ToLower(req.Task.GetProtocol().String()))
 
 	var id int64 = 1
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/covarity/echo/pkg/adapter"
 	"github.com/covarity/echo/pkg/pool"
-	"github.com/covarity/echo/pkg/runtime/config"
+	"github.com/covarity/echo/pkg/config"
 )
 
 const (

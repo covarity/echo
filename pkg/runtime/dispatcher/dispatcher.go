@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	adptTmpl "github.com/covarity/echo/api/adapter/model/v1"
 	"github.com/covarity/echo/pkg/adapter"
 	"github.com/covarity/echo/pkg/pool"
 	"github.com/covarity/echo/pkg/runtime/routing"
@@ -69,7 +70,7 @@ const (
 
 // Check implementation of runtime.Impl.
 func (d *Impl) Check(ctx context.Context, destination string) (adapter.CheckResult, error) {
-	s := d.getSession(ctx, destination)
+	s := d.getSession(ctx, adptTmpl.TemplateVariety_TEMPLATE_VARIETY_CHECK, destination)
 
 	var r adapter.CheckResult
 	err := s.dispatch()
@@ -100,7 +101,7 @@ func (d *Impl) GetRequester(ctx context.Context) Requester {
 }
 
 // Session template variety is CHECK for output producing templates (CHECK_WITH_OUTPUT)
-func (d *Impl) getSession(context context.Context, destination string) *session {
+func (d *Impl) getSession(context context.Context, variety adptTmpl.TemplateVariety, destination string) *session {
 	s := d.sessionPool.Get().(*session)
 	s.rc = d.acquireRoutingContext()
 	s.destination = destination

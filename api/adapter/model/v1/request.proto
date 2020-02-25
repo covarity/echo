@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "gogo/gogoproto/gogo.proto";
+
+package adapter.model.v1;
+
+option go_package="github.com/covarity/echo/api/adapter/model/v1";
+
+
+option (gogoproto.goproto_getters_all) = false;
+option (gogoproto.equal_all) = false;
+option (gogoproto.gostring_all) = false;
+
+// Expresses the result of a report call.
+message RequestResult {}
