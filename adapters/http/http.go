@@ -38,12 +38,11 @@ func GetInfo() adapter.Info {
 func (*handler) Close() error { return nil }
 
 func (*handler) HandleRequest(context.Context) error {
-	fmt.Printf("http:HandleRequest")
 	return nil
 }
 
 func (*handler) HandleSynthetic(context.Context) error {
-	fmt.Println("http:HandleSynthetic")
+	// TODO: add http synethetic check logic here
 	return nil
 }
 

@@ -2,11 +2,12 @@ package dispatcher
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/covarity/echo/pkg/adapter"
 	adptTmpl "github.com/covarity/echo/api/adapter/model/v1"
+	"github.com/covarity/echo/pkg/adapter"
 )
+
+const queueAllocSize = 64
 
 // session represents a call session to the Impl. It contains all the mutable state needed for handling the
 // call. It is used as temporary memory location to keep ephemeral state, thus avoiding garbage creation.
@@ -55,14 +56,26 @@ func (s *session) clear() {
 
 }
 
+func (s *session) ensureParallelism(minParallelism int) {
+	// Resize the channel to accommodate the parallelism, if necessary.
+	if cap(s.completed) < minParallelism {
+		allocSize := ((minParallelism / queueAllocSize) + 1) * queueAllocSize
+		s.completed = make(chan *dispatchState, allocSize)
+	}
+}
+
 func (s *session) dispatch() error {
+
 	var state *dispatchState
-	fmt.Println("dispatch:destination:", s.destination)
 	destination := s.rc.Routes.GetDestination(s.variety, s.destination)
+	//TODO: make this dynamic for performance or batch request scenarios
+	s.ensureParallelism(10)
 	state = s.impl.getDispatchState(s.ctx, destination)
 	s.requestState = state
 
 	s.dispatchToHandler(state)
+
+	s.waitForDispatched()
 	return nil
 }
 
@@ -79,5 +92,7 @@ func (s *session) waitForDispatched() {
 		if state.err != nil {
 			print("error occured wih dispatch %s", state.err)
 		}
+
+		s.impl.putDispatchState(state)
 	}
 }

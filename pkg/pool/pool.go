@@ -1,6 +1,7 @@
 package pool
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -9,7 +10,6 @@ import (
 
 // WorkFunc is a function that will be called by a worker in the pool
 type WorkFunc func(param interface{})
-
 
 // GoroutinePool represents a set of reusable goroutines onto which work can be scheduled.
 type GoroutinePool struct {
@@ -30,7 +30,6 @@ func New(queueDepth int, singleThreaded bool) *GoroutinePool {
 		singleThreaded: singleThreaded,
 	}
 }
-
 
 // Close waits for all goroutines to terminate (and implements io.Closer).
 func (gp *GoroutinePool) Close() error {
@@ -60,7 +59,6 @@ func (gp *GoroutinePool) AddWorkers(numWorkers int) {
 				for work := range gp.queue {
 					work.fn(work.param)
 				}
-
 				gp.wg.Done()
 			}()
 		}

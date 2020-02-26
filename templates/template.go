@@ -29,9 +29,9 @@ var (
 			},
 			// DispatchReport dispatches the instances to the handler.
 			DispatchRequest: func(ctx context.Context, handler adapter.Handler) error {
-				fmt.Printf("DispatchRequest:synthetic:%s\n", synthetic.TemplateName)
 				// Invoke the handler.
 				if err := handler.(synthetic.Handler).HandleSynthetic(ctx); err != nil {
+					fmt.Print("error")
 					return fmt.Errorf("failed to report all values: %v", err)
 				}
 				return nil

@@ -51,3 +51,5 @@ run.agent:
 
 test.agent:
 	curl -XPOST localhost:3001/v1/task -d '{"task": { "protocol": "HTTP"}}'
+debug:
+	cd cmd/echo; dlv debug

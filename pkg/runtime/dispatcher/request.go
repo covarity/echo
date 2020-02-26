@@ -2,7 +2,7 @@ package dispatcher
 
 import (
 	"context"
-	"fmt"
+
 	adptTmpl "github.com/covarity/echo/api/adapter/model/v1"
 )
 
@@ -30,7 +30,6 @@ func (r *requester) clear() {
 }
 
 func (r *requester) Request(destination string) error {
-	fmt.Printf("request.go:Request:destination:%s\n", destination)
 	s := r.impl.getSession(r.ctx, adptTmpl.TemplateVariety_TEMPLATE_VARIETY_REQUEST, destination)
 	s.requestState = r.state
 	err := s.dispatch()

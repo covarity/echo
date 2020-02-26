@@ -35,9 +35,6 @@ func (ds *dispatchState) invokeHandler(interface{}) {
 		ds.err = fmt.Errorf("panic during handler dispatch: %v", r)
 		ds.session.completed <- ds
 	}()
-	fmt.Printf("invokeHandler\n")
-	fmt.Printf("handlerName:%v\n", ds.destination.HandlerName)
-	fmt.Printf("adapterName:%v\n", ds.destination.AdapterName)
 
 	ctx := context.Background()
 	ds.destination.Template.DispatchRequest(ctx, ds.destination.Handler)
