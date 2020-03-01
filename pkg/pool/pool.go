@@ -1,7 +1,6 @@
 package pool
 
 import (
-	"fmt"
 	"sync"
 )
 

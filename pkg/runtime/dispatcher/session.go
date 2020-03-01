@@ -68,8 +68,11 @@ func (s *session) dispatch() error {
 
 	var state *dispatchState
 	destination := s.rc.Routes.GetDestination(s.variety, s.destination)
-	//TODO: make this dynamic for performance or batch request scenarios
-	s.ensureParallelism(10)
+	//TODO: make this dynamic for the following scenarios:
+	// 1. multi group request
+	// 2. performance run
+	// 3. cron batch and other interval based templates
+	s.ensureParallelism(1)
 	state = s.impl.getDispatchState(s.ctx, destination)
 	s.requestState = state
 
@@ -90,7 +93,7 @@ func (s *session) waitForDispatched() {
 		state := <-s.completed
 		s.activeDispatches--
 		if state.err != nil {
-			print("error occured wih dispatch %s", state.err)
+			print("error occured wih dispatch %s\n", state.err)
 		}
 
 		s.impl.putDispatchState(state)

@@ -2,7 +2,6 @@ package tcp
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/covarity/echo/adapters/metadata"
@@ -18,9 +17,7 @@ type Handler struct {
 
 type handler struct{}
 
-var _ synthetic.Handler = &handler{} 
-
-
+var _ synthetic.Handler = &handler{}
 
 var checkResult = adapter.CheckResult{
 	Status:        "OK",
@@ -48,8 +45,7 @@ func (*handler) HandleSynthetic(context.Context) error {
 
 type builder struct{}
 
-var _ synthetic.HandlerBuilder = &builder{} 
-
+var _ synthetic.HandlerBuilder = &builder{}
 
 func (*builder) SetAdapterConfig(adapter.Config) {}
 

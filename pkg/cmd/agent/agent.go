@@ -25,6 +25,7 @@ type Server struct {
 	// HTTP/REST gateway start parameters section
 	// HTTPPort is TCP port to listen by HTTP/REST gateway
 	HTTPPort string
+	MgmtPort string
 }
 
 func supportedTemplates() map[string]template.Info {
@@ -38,6 +39,7 @@ func RunServer() error {
 	var server Server
 	server.GRPCPort = "3000"
 	server.HTTPPort = "3001"
+	server.MgmtPort = "8082"
 	server.gp = pool.New(10, false)
 	server.gp.AddWorkers(10)
 	server.adapterGP = pool.New(10, false)
@@ -62,11 +64,14 @@ func RunServer() error {
 	m := runtime.New(templateMap, adapterMap, server.gp, server.adapterGP)
 
 	v1API := v1.NewTaskServiceServer(m.Dispatcher())
-
+	v1Health := v1.NewHealthServer()
 	// run HTTP gateway
 	go func() {
 		_ = rest.RunServer(ctx, server.GRPCPort, server.HTTPPort)
 	}()
+	go func() {
+		_ = rest.RunHealthServer(ctx, server.GRPCPort, server.MgmtPort)
+	}()
 
-	return grpc.RunServer(ctx, v1API, server.GRPCPort)
+	return grpc.RunServer(ctx, v1API, v1Health, server.GRPCPort)
 }
