@@ -2,9 +2,12 @@ package metadata
 
 import (
 	"fmt"
+	"time"
 
+	tcp "github.com/covarity/echo/adapters/tcp/config"
 	"github.com/covarity/echo/pkg/adapter"
 	"github.com/covarity/echo/templates/synthetic"
+	"github.com/golang/protobuf/ptypes"
 )
 
 var (
@@ -16,6 +19,7 @@ var (
 			SupportedTemplates: []string{
 				synthetic.TemplateName,
 			},
+			DefaultConfig: &tcp.Params{Timeout: ptypes.DurationProto(10 * time.Second)},
 		},
 		{
 			Name:        "tcp",

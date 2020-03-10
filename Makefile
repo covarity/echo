@@ -40,12 +40,22 @@ adapter.gen:
 				--plugin=grpc \
 				--go_out=paths=source_relative:api/adapter/model/v1 extensions.proto request.proto template.proto
 
+adapter.config.gen:
+	for adapter in tcp; do \
+		protoc --proto_path=adapters/$$adapter/config \
+			-Ithird_party/gogo \
+			-Ithird_party \
+			--plugin=grpc \
+			--go_out=paths=source_relative:adapters/$$adapter/config \
+			config.proto; \
+	done
+
 template.gen:
 	protoc --proto_path=api/adapter/model/v1 \
-				 --proto_path=third_party \
-				 --proto_path=api/ \
-				 --proto_path=templates/synthetic \
-				 --go_out=plugins=grpc:templates/synthetic synthetic_handler_service.proto
+		-I./third_party \
+		--proto_path=api/ \
+		--proto_path=templates/synthetic \
+		--go_out=plugins=grpc:templates/synthetic synthetic_handler_service.proto
 
 
 run.agent:
