@@ -1,13 +1,14 @@
-syntax = "proto3";
+syntax="proto3";
 
 
 // The `tcp` adapter enables echo to carry out TCP based interactions and collect the results of such interactions
-package adapters.tcp.config;
+package adapter.tcp.config;
 
-import "gogoproto/gogo.proto";
+import "gogo/gogoproto/gogo.proto";
+// import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 
-option go_package = "adapters/tcp/config";
+option go_package = "config";
 option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
 option (gogoproto.gostring_all) = false;
@@ -17,5 +18,5 @@ option (gogoproto.gogoproto_import) = true;
 // Configuration format for the `tcp` adapter.
 message Params {
     // next id: 12
-    google.protobuf.Duration timeout = 1 [(gogoproto.stdduration) = true, (gogoproto.nullable)=false ];
+    google.protobuf.Duration timeout = 1[(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 }

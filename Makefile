@@ -12,7 +12,11 @@ benchmark:
 
 proto.install:
 	go get -u github.com/golang/protobuf
+	go get -u github.com/gogo/protobuf/protoc-gen-gogo
 	go get -u github.com/golang/protobuf/protoc-gen-go
+	go get -u github.com/gogo/protobuf/protoc-gen-gogoslick
+	go get -u github.com/mwitkow/go-proto-validators/protoc-gen-govalidators
+	go get -u github.com/rakyll/statik
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
 	go get github.com/gogo/protobuf/gogoproto
@@ -42,11 +46,10 @@ adapter.gen:
 
 adapter.config.gen:
 	for adapter in tcp; do \
-		protoc --proto_path=adapters/$$adapter/config \
-			-Ithird_party/gogo \
+		protoc \
+			--proto_path=adapters/$$adapter/config \
 			-Ithird_party \
-			--plugin=grpc \
-			--go_out=paths=source_relative:adapters/$$adapter/config \
+			--gogoslick_out=plugins=grpc,paths=source_relative:adapters/$$adapter/config \
 			config.proto; \
 	done
 
