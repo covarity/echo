@@ -22,7 +22,7 @@
     "/v1/task": {
       "post": {
         "summary": "Create new task",
-        "operationId": "Create",
+        "operationId": "TaskService_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -62,7 +62,7 @@
     "/v1/task/all": {
       "get": {
         "summary": "Read all tasks",
-        "operationId": "ReadAll",
+        "operationId": "TaskService_ReadAll",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -115,7 +115,7 @@
     "/v1/task/{id}": {
       "get": {
         "summary": "Read task",
-        "operationId": "Read",
+        "operationId": "TaskService_Read",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -160,7 +160,7 @@
       },
       "delete": {
         "summary": "Delete task",
-        "operationId": "Delete",
+        "operationId": "TaskService_Delete",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -207,7 +207,7 @@
     "/v1/task/{task.id}": {
       "put": {
         "summary": "Update task",
-        "operationId": "Update",
+        "operationId": "TaskService_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -253,7 +253,7 @@
       },
       "patch": {
         "summary": "Update task",
-        "operationId": "Update2",
+        "operationId": "TaskService_Update2",
         "responses": {
           "200": {
             "description": "A successful response.",

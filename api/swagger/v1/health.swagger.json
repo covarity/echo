@@ -21,7 +21,7 @@
   "paths": {
     "/healthz": {
       "get": {
-        "operationId": "Check",
+        "operationId": "Health_Check",
         "responses": {
           "200": {
             "description": "A successful response.",
