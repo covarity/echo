@@ -11,21 +11,14 @@ benchmark:
 	benchstat bench.txt
 
 proto.install:
-	go get -u github.com/golang/protobuf
-	go get -u github.com/gogo/protobuf/protoc-gen-gogo
-	go get -u github.com/golang/protobuf/protoc-gen-go
-	go get -u github.com/gogo/protobuf/protoc-gen-gogoslick
-	go get -u github.com/mwitkow/go-proto-validators/protoc-gen-govalidators
-	go get -u github.com/rakyll/statik
-	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
-	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
-	go get github.com/gogo/protobuf/gogoproto
-	cp -r ${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis/google third_party/
+	$(eval grpcGatewayVersion := $(shell cat go.mod| grep -E -o 'grpc-ecosystem/grpc-gateway .*\b'| grep -E -o 'v[0-9]+.[0-9]+.[0-9]+'))
+	cp -r ${GOPATH}/pkg/mod/github.com/grpc-ecosystem/grpc-gateway@$(grpcGatewayVersion)/third_party/googleapis/google third_party/
 	mkdir -p third_party/protoc-gen-swagger/options
-	cp ${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger/options/annotations.proto third_party/protoc-gen-swagger/options
-	cp ${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger/options/openapiv2.proto third_party/protoc-gen-swagger/options
+	cp ${GOPATH}/pkg/mod/github.com/grpc-ecosystem/grpc-gateway@$(grpcGatewayVersion)/protoc-gen-swagger/options/annotations.proto third_party/protoc-gen-swagger/options
+	cp ${GOPATH}/pkg/mod/github.com/grpc-ecosystem/grpc-gateway@$(grpcGatewayVersion)/protoc-gen-swagger/options/openapiv2.proto third_party/protoc-gen-swagger/options
 	mkdir -p third_party/gogo 
-	cp -r ${GOPATH}/src/github.com/gogo/protobuf/gogoproto third_party/gogo
+	$(eval protobufVersion := $(shell cat go.mod| grep -E -o 'gogo/protobuf .*\b'| grep -E -o 'v[0-9]+.[0-9]+.[0-9]+'))
+	cp -r ${GOPATH}/pkg/mod/github.com/gogo/protobuf@$(protobufVersion)/gogoproto third_party/gogo
 
 proto.gen:
 	mkdir -p pkg/api/v1
@@ -37,6 +30,7 @@ proto.gen:
 	protoc --proto_path=api/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/api/v1 health.proto
 	protoc --proto_path=api/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/swagger/v1 task.proto
 	protoc --proto_path=api/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/swagger/v1 health.proto
+	
 policy.gen:
 	protoc --proto_path=api/policy/v1alpha1/ \
 				--proto_path=third_party \
