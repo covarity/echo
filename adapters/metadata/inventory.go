@@ -5,9 +5,9 @@ import (
 	"time"
 
 	tcp "github.com/covarity/echo/adapters/tcp/config"
+	http "github.com/covarity/echo/adapters/http/config"
 	"github.com/covarity/echo/pkg/adapter"
 	"github.com/covarity/echo/templates/synthetic"
-	"github.com/golang/protobuf/ptypes"
 )
 
 var (
@@ -19,7 +19,7 @@ var (
 			SupportedTemplates: []string{
 				synthetic.TemplateName,
 			},
-			DefaultConfig: &tcp.Params{Timeout: ptypes.DurationProto(10 * time.Second)},
+			DefaultConfig: &tcp.Params{Timeout: 10 * time.Second},
 		},
 		{
 			Name:        "tcp",
@@ -36,6 +36,7 @@ var (
 			SupportedTemplates: []string{
 				synthetic.TemplateName,
 			},
+			DefaultConfig: &http.Params{Timeout: 10 * time.Second},
 		},
 	}
 )

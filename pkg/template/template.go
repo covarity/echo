@@ -6,6 +6,8 @@ import (
 
 	adptTmpl "github.com/covarity/echo/api/adapter/model/v1"
 	"github.com/covarity/echo/pkg/adapter"
+	"github.com/gogo/protobuf/proto"
+	pb "github.com/covarity/echo/api/policy/v1alpha1"
 )
 
 type (
@@ -16,6 +18,12 @@ type (
 		SupportsTemplate(hndlrBuilder adapter.HandlerBuilder, tmpl string) (bool, string)
 	}
 
+	// TypeEvalFn evaluates an expression and returns the ValueType for the expression.
+	TypeEvalFn func(string) (pb.ValueType, error)
+	// InferTypeFn does Type inference from the Instance.params proto message.
+	InferTypeFn func(proto.Message, TypeEvalFn) (proto.Message, error)
+	// SetTypeFn dispatches the inferred types to handlers
+	SetTypeFn func(types map[string]proto.Message, builder adapter.HandlerBuilder)
 	// DispatchRequestFn dispatches the requests to the handler.
 	DispatchRequestFn func(ctx context.Context, handler adapter.Handler) error
 

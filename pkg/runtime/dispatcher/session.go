@@ -2,6 +2,7 @@ package dispatcher
 
 import (
 	"context"
+	"fmt"
 
 	adptTmpl "github.com/covarity/echo/api/adapter/model/v1"
 	"github.com/covarity/echo/pkg/adapter"
@@ -93,7 +94,7 @@ func (s *session) waitForDispatched() {
 		state := <-s.completed
 		s.activeDispatches--
 		if state.err != nil {
-			print("error occured wih dispatch %s\n", state.err)
+			fmt.Printf("error occured wih dispatch %s\n", state.err)
 		}
 
 		s.impl.putDispatchState(state)

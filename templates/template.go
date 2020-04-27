@@ -23,8 +23,8 @@ var (
 				_, ok := hndlrBuilder.(synthetic.HandlerBuilder)
 				return ok
 			},
-			HandlerSupportsTemplate: func(hndlr adapter.Handler) bool {
-				_, ok := hndlr.(synthetic.Handler)
+			HandlerSupportsTemplate: func(handler adapter.Handler) bool {
+				_, ok := handler.(synthetic.Handler)
 				return ok
 			},
 			// DispatchReport dispatches the instances to the handler.

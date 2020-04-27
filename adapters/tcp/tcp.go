@@ -31,6 +31,13 @@ func (*handler) HandleRequest(context.Context) error {
 	return nil
 }
 
+
+func (*handler) HandleSynthetic(context.Context) error {
+	// TODO: add http synethetic check logic here
+	fmt.Printf("Adapter:TCP:HandleSynthetic")
+	return nil
+}
+
 type builder struct{}
 
 func (*builder) SetAdapterConfig(adapter.Config) {}

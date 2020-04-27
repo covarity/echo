@@ -1,0 +1,38 @@
+apiVersion: "config.echo.io/v1alpha1"
+kind: instance
+metadata:
+  name: tcp-default
+spec:
+  compiledTemplate: synthetic
+  params:
+    host: request.host
+    port: request.port
+---
+apiVersion: "config.echo.io/v1alpha1"
+kind: handler
+metadata:
+  name: tcp-long
+spec:
+  compiledAdapter: tcp
+  params:
+    timeout: 30s
+---
+apiVersion: "config.echo.io/v1alpha1"
+kind: handler
+metadata:
+  name: tcp-short
+spec:
+  compiledAdapter: tcp
+  params:
+    timeout: 10s
+---
+apiVersion: "config.echo.io/v1alpha1"
+kind: rule
+metadata:
+  name: tcp-checker 
+spec:
+  match: request.type == "TCP"
+  actions:
+  - handler: tcp.handler
+    instances:
+    - tcp-default

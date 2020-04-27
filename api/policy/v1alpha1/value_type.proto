@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package echo.policy.v1alpha1;
+
+option go_package="github.com/covarity/echo/api/policy/v1alpha1";
+
+// ValueType describes the types that values in the Echo system can take. These
+// are used to describe the type of Attributes at run time, describe the type of
+// the result of evaluating an expression, and to describe the runtime type of
+// fields of other descriptors.
+enum ValueType {
+    // Invalid, default value.
+    VALUE_TYPE_UNSPECIFIED = 0;
+
+    // An undiscriminated variable-length string.
+    STRING = 1;
+
+    // An undiscriminated 64-bit signed integer.
+    INT64 = 2;
+
+    // An undiscriminated 64-bit floating-point value.
+    DOUBLE = 3;
+
+    // An undiscriminated boolean value.
+    BOOL = 4;
+
+    // A point in time.
+    TIMESTAMP = 5;
+
+    // An IP address.
+    IP_ADDRESS = 6;
+
+    // An email address.
+    EMAIL_ADDRESS = 7;
+
+    // A URI.
+    URI = 8;
+
+    // A DNS name.
+    DNS_NAME = 9;
+
+    // A span between two points in time.
+    DURATION = 10;
+
+    // A map string -> string, typically used by headers.
+    STRING_MAP = 11;
+}

@@ -2,6 +2,7 @@ package tcp
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/covarity/echo/adapters/metadata"
@@ -40,6 +41,7 @@ func (*handler) HandleRequest(context.Context) error {
 
 func (*handler) HandleSynthetic(context.Context) error {
 	// TODO: add http synethetic check logic here
+	fmt.Printf("Adapter:HTTP:HandleSynthetic")
 	return nil
 }
 

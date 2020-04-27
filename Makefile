@@ -37,6 +37,17 @@ proto.gen:
 	protoc --proto_path=api/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/api/v1 health.proto
 	protoc --proto_path=api/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/swagger/v1 task.proto
 	protoc --proto_path=api/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/swagger/v1 health.proto
+policy.gen:
+	protoc --proto_path=api/policy/v1alpha1/ \
+				--proto_path=third_party \
+				--proto_path=api/ \
+				--plugin=grpc \
+				--go_out=paths=source_relative:api/policy/v1alpha1 cfg.proto type.proto
+	protoc --proto_path=api/policy/v1alpha1/ \
+				--proto_path=third_party \
+				--proto_path=api/ \
+				--plugin=grpc \
+				--go_out=paths=source_relative:api/policy/v1alpha1 value_type.proto
 adapter.gen:
 	protoc --proto_path=api/adapter/model/v1 \
 				--proto_path=third_party \
@@ -45,7 +56,7 @@ adapter.gen:
 				--go_out=paths=source_relative:api/adapter/model/v1 extensions.proto request.proto template.proto
 
 adapter.config.gen:
-	for adapter in tcp; do \
+	for adapter in tcp http; do \
 		protoc \
 			--proto_path=adapters/$$adapter/config \
 			-Ithird_party \

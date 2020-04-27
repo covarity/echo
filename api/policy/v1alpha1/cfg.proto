@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/struct.proto";
+import "policy/v1alpha1/value_type.proto";
+
+package echo.policy.v1alpha1;
+
+option go_package="github.com/covarity/echo/api/policy/v1alpha1";
+
+message AttributeManifest {
+  // The revision of this document. Assigned by server.
+  string revision = 1;
+  // Name of the component producing these attributes. This can be
+  // the proxy (with the canonical name `istio-proxy`) or the name of an
+  // `attributes` kind adapter in Mixer.
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  message AttributeInfo {
+    // A human-readable description of the attribute's purpose.
+    string description = 1;
+
+    // The type of data carried by this attribute.
+    echo.policy.v1alpha1.ValueType value_type = 2 [(google.api.field_behavior) = REQUIRED];
+  }
+
+  map<string, AttributeInfo> attributes = 3;
+}
+
+message Rule {
+  // Match is an attribute based predicate. When Mixer receives a
+  // request it evaluates the match expression and executes all the associated `actions`
+  // if the match evaluates to true.
+  //
+  // A few example match:
+  //
+  // * an empty match evaluates to `true`
+  // * `true`, a boolean literal; a rule with this match will always be executed
+  // * `match(destination.service.host, "ratings.*")` selects any request targeting a service whose
+  // name starts with "ratings"
+  // * `attr1 == "20" && attr2 == "30"` logical AND, OR, and NOT are also available
+  string match = 1;
+
+  // The actions that will be executed when match evaluates to `true`.
+  repeated Action actions = 2;
+}
+
+message Action {
+  // Fully qualified name of the handler to invoke.
+  // Must match the `name` of a [Handler][istio.policy.v1beta1.Handler.name].
+  string handler = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Each value must match the fully qualified name of the
+  // [Instance][istio.policy.v1beta1.Instance.name]s.
+  // Referenced instances are evaluated by resolving the attributes/literals for all the fields.
+  // The constructed objects are then passed to the `handler` referenced within this action.
+  repeated string instances = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // A handle to refer to the results of the action.
+  string name = 4;
+}
+
+
+
+message Instance {
+  // The name of this instance
+  //
+  // Must be unique amongst other Instances in scope. Used by [Action][istio.policy.v1beta1.Action] to refer
+  // to an instance produced by this instance.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The name of the compiled in template this instance creates instances for. For referencing non compiled-in
+  // templates, use the `template` field instead.
+  //
+  // The value must match the name of the available template Mixer is built with.
+  string compiled_template = 67794676 [(google.api.field_behavior) = REQUIRED];
+
+  // The name of the template this instance creates instances for. For referencing compiled-in
+  // templates, use the `compiled_template` field instead.
+  //
+  // The value must match the name of the available template in scope.
+  string template = 2;
+
+  // Depends on referenced template. Struct representation of a
+  // proto defined by the template; this varies depending on the value of field `template`.
+  google.protobuf.Struct params = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // Defines attribute bindings to map the output of attribute-producing adapters back into
+  // the attribute space. The variable `output` refers to the output template instance produced
+  // by the adapter.
+  // The following example derives `source.namespace` from `source.uid` in the context of Kubernetes:
+  // ```yaml
+  // params:
+  //   # Pass the required attribute data to the adapter
+  //   source_uid: source.uid | ""
+  // attribute_bindings:
+  //   # Fill the new attributes from the adapter produced output
+  //   source.namespace: output.source_namespace
+  // ```
+  map<string, string> attribute_bindings = 4;
+}
+
+
+message Handler {
+  // Must be unique in the entire Mixer configuration. Used by [Actions][istio.policy.v1beta1.Action.handler]
+  // to refer to this handler.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The name of the compiled in adapter this handler instantiates. For referencing non compiled-in
+  // adapters, use the `adapter` field instead.
+  //
+  // The value must match the name of the available adapter Mixer is built with. An adapter's name is typically a
+  // constant in its code.
+  string compiled_adapter = 67794676 [(google.api.field_behavior) = REQUIRED];
+
+  // The name of a specific adapter implementation. For referencing compiled-in
+  // adapters, use the `compiled_adapter` field instead.
+  //
+  // An adapter's implementation name is typically a constant in its code.
+  string adapter = 2;
+
+  // Depends on adapter implementation. Struct representation of a
+  // proto defined by the adapter implementation; this varies depending on the value of field `adapter`.
+  google.protobuf.Struct params = 3;
+}
+
