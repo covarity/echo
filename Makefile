@@ -30,6 +30,7 @@ proto.gen:
 	protoc --proto_path=api/proto/v1 --proto_path=third_party --grpc-gateway_out=logtostderr=true:pkg/api/v1 health.proto
 	protoc --proto_path=api/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/swagger/v1 task.proto
 	protoc --proto_path=api/proto/v1 --proto_path=third_party --swagger_out=logtostderr=true:api/swagger/v1 health.proto
+	
 policy.gen:
 	protoc --proto_path=api/policy/v1alpha1/ \
 				--proto_path=third_party \

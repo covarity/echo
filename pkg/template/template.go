@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	adptTmpl "github.com/covarity/echo/api/adapter/model/v1"
+	pb "github.com/covarity/echo/api/policy/v1alpha1"
 	"github.com/covarity/echo/pkg/adapter"
 	"github.com/gogo/protobuf/proto"
-	pb "github.com/covarity/echo/api/policy/v1alpha1"
 )
 
 type (
